@@ -1,0 +1,44 @@
+@import '../../../variables';
+
+mat-card {
+    width: 300px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+  
+mat-card-header {
+    background-color: $primary-color;
+    color: white;
+    padding: 7px;
+    border-radius: 8px 8px 0 0;
+    margin-bottom: 10px;
+}
+  
+mat-card-content {
+    padding: 6px;
+}
+
+mat-card-title {
+    font-size: 18px;
+}
+  
+.form-field {
+    width: 98%;
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+}
+  
+.form-field .label {
+    font-size: 14px;
+    color: #555;
+    padding: 3px 0;
+}
+  
+input {
+    width: 100%;
+    padding: 2px;
+}
+  
