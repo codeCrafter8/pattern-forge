@@ -15,18 +15,9 @@
 
 button {
     align-self: flex-end;
-    background-color: #60a0e0;
-    color: white;
-    border: none;
     padding: 10px 20px;
     font-size: 16px;
-    cursor: pointer;
     border-radius: 4px;
-    transition: background-color 0.3s;
     width: 100px;
     margin-top: 10px;
-}
-  
-button:hover {
-    background-color: #4c88b0;
 }
