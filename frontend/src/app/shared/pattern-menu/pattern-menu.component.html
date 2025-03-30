@@ -1,0 +1,9 @@
+<div class="menu-container">
+    <div class="menu-item" *ngFor="let pattern of patterns">
+    <span class="menu-item-label">{{ pattern.name }}</span>
+    <div class="submenu">
+        <button *ngFor="let item of pattern.submenu" class="submenu-item">{{ item }}</button>
+    </div>
+    </div>
+</div>
+  

@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
 import { HomeComponent } from "./features/home/home.component";
+import { PatternMenuComponent } from "./shared/pattern-menu/pattern-menu.component";
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, HomeComponent],
+  imports: [HomeComponent, PatternMenuComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
