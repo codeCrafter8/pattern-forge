@@ -3,11 +3,12 @@ package com.example.patternforge.generator;
 import freemarker.template.TemplateException;
 
 import java.io.IOException;
+import java.util.List;
 
 public interface PatternGenerator {
-    String generateCode() throws TemplateException, IOException;
-
     String getName();
 
     void setContext(CodeGenerationContext context);
+
+    List<GeneratedFile> generateFiles() throws TemplateException, IOException;
 }

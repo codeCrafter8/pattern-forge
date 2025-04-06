@@ -1,2 +1,8 @@
 <app-pattern-menu></app-pattern-menu>
-<app-home></app-home>
+<div class="main-content">
+    <div class="row">
+        <app-config-panel></app-config-panel>
+        <app-code-display [baseClassCode]="baseClassCode"></app-code-display>
+    </div>
+    <button mat-raised-button (click)="generateCode()">Generuj</button>
+</div>

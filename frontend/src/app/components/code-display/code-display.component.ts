@@ -1,4 +1,4 @@
-import { Component } from '@angular/core'; 
+import { Component, Input } from '@angular/core'; 
 import { MatCardModule } from '@angular/material/card'; 
 import { MatTabsModule } from '@angular/material/tabs'; 
 
@@ -12,7 +12,9 @@ import { MatTabsModule } from '@angular/material/tabs';
   styleUrl: './code-display.component.scss'
 })
 export class CodeDisplayComponent {
-  baseClassCode = 'class BaseClass {\n  constructor() {\n    // base class logic\n  }\n}';
+  //baseClassCode = 'class BaseClass {\n  constructor() {\n    // base class logic\n  }\n}';
+  @Input() baseClassCode: string = '';
+  
   childClassCode = 'class ChildClass extends BaseClass {\n  constructor() {\n    super();\n    // child class logic\n  }\n}';
 
 }

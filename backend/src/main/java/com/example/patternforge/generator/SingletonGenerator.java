@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RequiredArgsConstructor
@@ -19,22 +19,22 @@ import java.util.Map;
 @Component
 public class SingletonGenerator implements PatternGenerator {
 
-    private final String name = "singleton";
+    private final String name = "SINGLETON";
 
     private final Configuration freemarkerConfig;
     private CodeGenerationContext context;
 
     @Override
-    public String generateCode() throws TemplateException, IOException {
+    public List<GeneratedFile> generateFiles() throws IOException, TemplateException {
         if (context == null) {
             throw new IllegalArgumentException("Pattern context not set.");
         }
 
-        Map<String, Object> model = new HashMap<>();
-        model.put("className", context.className());
+        Map<String, Object> model = Map.of("className", context.className());
 
         Template template = freemarkerConfig.getTemplate("singletonTemplate.ftl");
+        String content = FreeMarkerTemplateUtils.processTemplateIntoString(template, model);
 
-        return FreeMarkerTemplateUtils.processTemplateIntoString(template, model);
+        return List.of(new GeneratedFile(context.className() + ".java", content));
     }
 }
