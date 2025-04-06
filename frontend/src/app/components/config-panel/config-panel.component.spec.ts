@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ConfigPanelComponent } from './config-panel.component';
+import { provideHttpClient } from '@angular/common/http';
 
 describe('ConfigPanelComponent', () => {
   let component: ConfigPanelComponent;
@@ -8,7 +9,8 @@ describe('ConfigPanelComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ConfigPanelComponent]
+      imports: [ConfigPanelComponent],
+      providers: [provideHttpClient()],
     })
     .compileComponents();
 
