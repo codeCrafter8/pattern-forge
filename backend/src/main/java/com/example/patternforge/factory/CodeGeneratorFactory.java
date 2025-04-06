@@ -18,7 +18,7 @@ public class CodeGeneratorFactory {
     }
 
     public PatternGenerator getGenerator(String patternName) {
-        PatternGenerator generator = generators.get(patternName.toLowerCase());
+        PatternGenerator generator = generators.get(patternName.toUpperCase());
 
         if (generator == null) {
             throw new IllegalArgumentException(String.format("Design pattern %s not supported.", patternName));

@@ -26,8 +26,8 @@ public class SingletonGenerator implements PatternGenerator {
 
     @Override
     public List<GeneratedFile> generateFiles() throws IOException, TemplateException {
-        if (context == null) {
-            throw new IllegalArgumentException("Pattern context not set.");
+        if (context == null || context.className().isBlank()) {
+            throw new IllegalArgumentException("Pattern context not set properly.");
         }
 
         Map<String, Object> model = Map.of("className", context.className());

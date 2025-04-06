@@ -1,7 +1,7 @@
 <mat-card class="code-display-card">
     <mat-card-content>
       <mat-tab-group class="tabs">
-        <mat-tab *ngFor="let file of generatedFiles" [label]="file.filename">
+        <mat-tab *ngFor="let file of generatedFiles" [label]="file.fileName">
           <div class="code-box">
             <pre>{{ file.content }}</pre>
           </div>
