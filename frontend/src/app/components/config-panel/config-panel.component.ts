@@ -4,6 +4,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { CodeGenerationContext } from '../../models/code-generation-context';
 import { CodeGeneratorService } from '../../services/code-generator.service';
+import { GeneratedFile } from '../../models/generated-file';
 
 @Component({
   selector: 'app-config-panel',
@@ -17,7 +18,7 @@ import { CodeGeneratorService } from '../../services/code-generator.service';
 })
 export class ConfigPanelComponent {
   patternForm: FormGroup;
-  @Output() codeGenerated = new EventEmitter<string>();
+  @Output() generatedFiles = new EventEmitter<GeneratedFile[]>();
 
   constructor(private codeGeneratorService: CodeGeneratorService) {
     this.patternForm = new FormGroup({
@@ -30,8 +31,10 @@ export class ConfigPanelComponent {
       className: this.patternForm.get('className')?.value,
     };
 
-    this.codeGeneratorService.generateCode('singleton', context).subscribe({
-      next: (code) => this.generatedCode = code,
+    this.codeGeneratorService.generateFiles('singleton', context).subscribe({
+      next: (files: GeneratedFile[]) => {
+        this.generatedFiles.emit(files); 
+      },
       error: (err) => console.error('Error generating code:', err)
     });
   }

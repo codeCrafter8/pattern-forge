@@ -3,6 +3,7 @@ import { PatternMenuComponent } from "./components/pattern-menu/pattern-menu.com
 import { ConfigPanelComponent } from './components/config-panel/config-panel.component';
 import { CodeDisplayComponent } from './components/code-display/code-display.component';
 import { MatButtonModule } from '@angular/material/button';
+import { GeneratedFile } from './models/generated-file';
 
 @Component({
   selector: 'app-root',
@@ -17,9 +18,13 @@ import { MatButtonModule } from '@angular/material/button';
 })
 export class AppComponent {
   title = 'frontend';
-  baseClassCode: string = '';
+  generatedFiles: GeneratedFile[] = [];
 
-  generateCode() {
+  handleGeneratedFiles(files: GeneratedFile[]) {
+    this.generatedFiles = files;
+  }
+
+  download() {
     console.log('Generating code...');
   }
 }

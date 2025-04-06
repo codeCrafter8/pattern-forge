@@ -1,14 +1,9 @@
 <mat-card class="code-display-card">
     <mat-card-content>
       <mat-tab-group class="tabs">
-        <mat-tab label="Klasa bazowa">
+        <mat-tab *ngFor="let file of generatedFiles" [label]="file.filename">
           <div class="code-box">
-            <pre>{{ baseClassCode }}</pre>
-          </div>
-        </mat-tab>
-        <mat-tab label="Klasa potomna">
-          <div class="code-box">
-            <pre>{{ childClassCode }}</pre>
+            <pre>{{ file.content }}</pre>
           </div>
         </mat-tab>
       </mat-tab-group>
