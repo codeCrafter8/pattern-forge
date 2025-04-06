@@ -28,10 +28,11 @@ export class ConfigPanelComponent {
 
   configure() {
     const context: CodeGenerationContext = {
+      patternName: 'singleton',
       className: this.patternForm.get('className')?.value,
     };
 
-    this.codeGeneratorService.generateFiles('singleton', context).subscribe({
+    this.codeGeneratorService.generateFiles(context).subscribe({
       next: (files: GeneratedFile[]) => {
         this.generatedFiles.emit(files); 
       },

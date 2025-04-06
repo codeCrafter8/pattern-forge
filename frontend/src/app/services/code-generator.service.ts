@@ -13,7 +13,7 @@ export class CodeGeneratorService {
 
   constructor(private http: HttpClient) {}
 
-  generateFiles(pattern: string, context: CodeGenerationContext): Observable<GeneratedFile[]> {
-    return this.http.post<GeneratedFile[]>(`${this.API_URL}/generate/${pattern}`, context);
+  generateFiles(context: CodeGenerationContext): Observable<GeneratedFile[]> {
+    return this.http.post<GeneratedFile[]>(`${this.API_URL}/generate`, context);
   }
 }
