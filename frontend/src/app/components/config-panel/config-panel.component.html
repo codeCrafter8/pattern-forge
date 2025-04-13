@@ -1,15 +1,15 @@
 <mat-card>
     <mat-card-header>
-      <mat-card-title>Konfigurator</mat-card-title>
+      <mat-card-title>Congifurer</mat-card-title>
     </mat-card-header>
     <mat-card-content>
       <form [formGroup]="patternForm">
-        <div class="form-field">
-          <span class="label">Nazwa klasy</span>
-          <input placeholder="Wprowadź nazwę klasy" formControlName="className" />
+        <div class="form-field" *ngFor="let variable of variables">
+          <span class="label">{{ variable }}</span>
+          <input [formControlName]="variable" [placeholder]="'Enter ' + variable" />
         </div>
       </form>
     </mat-card-content>
-    <button mat-raised-button (click)="configure()">Kongifuruj</button>
+    <button mat-raised-button (click)="configure()">Configure</button>
 </mat-card>
   
