@@ -1,5 +1,6 @@
 package com.example.patternforge.generator;
 
+import com.example.patternforge.generator.context.CodeGenerationContext;
 import freemarker.template.TemplateException;
 
 import java.io.IOException;
