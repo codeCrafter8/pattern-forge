@@ -1,12 +1,15 @@
 import { TestBed } from '@angular/core/testing';
 
 import { PatternService } from './pattern.service';
+import { provideHttpClient } from '@angular/common/http';
 
 describe('PatternService', () => {
   let service: PatternService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
+    TestBed.configureTestingModule({
+      providers: [provideHttpClient()],
+    });
     service = TestBed.inject(PatternService);
   });
 
