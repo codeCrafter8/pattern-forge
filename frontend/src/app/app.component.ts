@@ -4,9 +4,8 @@ import { ConfigPanelComponent } from './components/config-panel/config-panel.com
 import { CodeDisplayComponent } from './components/code-display/code-display.component';
 import { MatButtonModule } from '@angular/material/button';
 import { GeneratedFile } from './models/generated-file';
-import { PatternSelectionService } from './services/pattern-selection.service';
-import { Subscription } from 'rxjs';
 import { TitleCasePipe } from '@angular/common';
+import { ZipDownloadService } from './services/zip-download.service';
 
 @Component({
   selector: 'app-root',
@@ -22,28 +21,35 @@ import { TitleCasePipe } from '@angular/common';
 })
 export class AppComponent {
   generatedFiles: GeneratedFile[] = [];
-  private subscription!: Subscription;
   selectedPattern: string = 'singleton';
 
-  constructor(private patternSelectionService: PatternSelectionService) {}
+  constructor(
+    private zipDownloadService: ZipDownloadService,
+  ) {}
   
-  ngOnInit(): void {
-    this.subscription = this.patternSelectionService.selectedPattern$.subscribe(pattern => {
-      if (pattern) {
-        this.selectedPattern = pattern;
-      }
-    });
+  handlePatternSelection(pattern: string) {
+    this.selectedPattern = pattern;
   }
 
-  ngOnDestroy(): void {
-    this.subscription?.unsubscribe();
-  }
-
-  handleGeneratedFiles(files: GeneratedFile[]) {
+  handleFilesGenerated(files: GeneratedFile[]) {
     this.generatedFiles = files;
   }
 
   download() {
-    console.log('Generating code...');
+    this.zipDownloadService.downloadZip(this.generatedFiles).subscribe({
+      next: (blob) => {
+        const url = window.URL.createObjectURL(blob);
+        
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'generated_files.zip'; 
+        a.click();
+        
+        window.URL.revokeObjectURL(url);
+      },
+      error: (err) => {
+        console.error('Error downloading ZIP:', err);
+      }
+    });
   }
 }
