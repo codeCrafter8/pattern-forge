@@ -1,4 +1,4 @@
 export interface CodeGenerationContext {
     patternName: string;
-    className: string;
+    [key: string]: string;
 }

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { NgFor } from '@angular/common';
+import { PatternSelectionService } from '../../services/pattern-selection.service';
 
 @Component({
   selector: 'app-pattern-menu',
@@ -10,18 +11,25 @@ import { NgFor } from '@angular/common';
   styleUrl: './pattern-menu.component.scss'
 })
 export class PatternMenuComponent {
-  patterns = [
+  patternTypes = [
     {
-      name: 'Wzorce Strukturalne',
-      submenu: ['Builder']
+      name: 'Structural Patterns',
+      patternNames: ['Adapter']
     },
     {
-      name: 'Wzorce Behawioralne',
-      submenu: ['Observer']
+      name: 'Behavioral Patterns',
+      patternNames: ['Observer']
     },
     {
-      name: 'Wzorce Kreacyjne',
-      submenu: ['Factory', 'Singleton']
+      name: 'Creational Patterns',
+      patternNames: ['Factory', 'Singleton']
     }
   ];
+
+  constructor(private patternSelectionService: PatternSelectionService) {}
+
+  selectPattern(patternName: string) {
+    this.patternSelectionService.selectPattern(patternName.toLowerCase());
+  }
+  
 }

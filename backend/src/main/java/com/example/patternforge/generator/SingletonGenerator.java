@@ -42,7 +42,7 @@ public class SingletonGenerator implements PatternGenerator {
 
         Map<String, Object> model = Map.of("className", context.className());
 
-        Template template = freemarkerConfig.getTemplate("singleton/Template.ftl");
+        Template template = freemarkerConfig.getTemplate("singleton/Singleton.ftl");
         String content = FreeMarkerTemplateUtils.processTemplateIntoString(template, model);
 
         return List.of(new GeneratedFile(context.className() + ".java", content));
