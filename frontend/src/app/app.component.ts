@@ -42,7 +42,7 @@ export class AppComponent {
         
         const a = document.createElement('a');
         a.href = url;
-        a.download = 'generated_files.zip'; 
+        a.download = 'pattern.zip'; 
         a.click();
         
         window.URL.revokeObjectURL(url);
