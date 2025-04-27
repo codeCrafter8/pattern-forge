@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -30,8 +30,10 @@ export class ConfigPanelComponent {
     private codeGeneratorService: CodeGeneratorService
   ) {}
 
-  ngOnInit(): void {
-    this.loadVariablesForPattern(this.selectedPattern);
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['selectedPattern']) {
+      this.loadVariablesForPattern(this.selectedPattern);
+    }
   }
 
   loadVariablesForPattern(pattern: string) {
@@ -58,10 +60,26 @@ export class ConfigPanelComponent {
     }
   }
 
+  formatVariableName(variable: string): string {
+    if (!variable) return variable;
+  
+    return variable
+      .split('')
+      .map((char, index) => {
+        if (index === 0) {
+          return char.toUpperCase(); 
+        }
+        return char === char.toUpperCase() ? ` ${char}` : char; 
+      })
+      .join('');
+  }
+
   configure() {
+    const formValues = this.patternForm.value;
+    
     const context: CodeGenerationContext = {
       patternName: this.selectedPattern || '',
-      className: this.patternForm.get('className')?.value,
+      ...formValues
     };
 
     this.codeGeneratorService.generateFiles(context).subscribe({

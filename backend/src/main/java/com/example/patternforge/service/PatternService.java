@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 import java.util.Set;
 
 @RequiredArgsConstructor
@@ -17,9 +16,8 @@ public class PatternService {
 
     private final TemplateReader templateReader;
     private final VariableExtractor variableExtractor;
-    private final VariableFormatter variableFormatter;
 
-    public List<String> getPatternConfig(String patternName) {
+    public Set<String> getPatternConfig(String patternName) {
         try {
             log.info("Looking for variables for pattern: {}", patternName);
 
@@ -29,9 +27,7 @@ public class PatternService {
 
             log.info("Found {} variables for pattern: {}", variables.size(), patternName);
 
-            return variables.stream()
-                    .map(variableFormatter::format)
-                    .toList();
+            return variables;
 
         } catch (IOException e) {
             log.error("Error reading templates for pattern: {}", patternName, e);

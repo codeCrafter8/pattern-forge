@@ -49,10 +49,10 @@ public class AdapterGenerator implements PatternGenerator {
         );
 
         return List.of(
-                generate("Client.java", "adapter/Client.ftl", model),
                 generate("Target.java", "adapter/Target.ftl", model),
+                generate("Adaptee.java", "adapter/Adaptee.ftl", model),
                 generate("Adapter.java", "adapter/Adapter.ftl", model),
-                generate("Adaptee.java", "adapter/Adaptee.ftl", model)
+                generate("Client.java", "adapter/Client.ftl", model)
         );
     }
 

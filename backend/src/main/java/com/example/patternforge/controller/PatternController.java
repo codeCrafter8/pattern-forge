@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import java.util.Set;
 
 @RequiredArgsConstructor
 @RestController
@@ -18,7 +18,7 @@ public class PatternController {
     private final PatternService patternService;
 
     @GetMapping("/{patternName}/config")
-    public ResponseEntity<List<String>> getPatternConfig(@PathVariable String patternName) {
+    public ResponseEntity<Set<String>> getPatternConfig(@PathVariable String patternName) {
         return ResponseEntity.ok(patternService.getPatternConfig(patternName));
     }
 }
