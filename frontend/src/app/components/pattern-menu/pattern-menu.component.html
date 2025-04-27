@@ -1,0 +1,11 @@
+<div class="menu-container">
+    <div class="menu-item" *ngFor="let patternType of patternTypes">
+    <span class="menu-item-label">{{ patternType.name }}</span>
+    <div class="submenu">
+        <button *ngFor="let patternName of patternType.patternNames" class="submenu-item" (click)="selectPattern(patternName)">
+            {{ patternName }}
+        </button>
+    </div>
+    </div>
+</div>
+  
