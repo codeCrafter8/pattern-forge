@@ -4,6 +4,9 @@ import { ConfigPanelComponent } from './components/config-panel/config-panel.com
 import { CodeDisplayComponent } from './components/code-display/code-display.component';
 import { MatButtonModule } from '@angular/material/button';
 import { GeneratedFile } from './models/generated-file';
+import { PatternSelectionService } from './services/pattern-selection.service';
+import { Subscription } from 'rxjs';
+import { TitleCasePipe } from '@angular/common';
 
 @Component({
   selector: 'app-root',
@@ -11,14 +14,30 @@ import { GeneratedFile } from './models/generated-file';
     PatternMenuComponent, 
     ConfigPanelComponent, 
     CodeDisplayComponent,
-    MatButtonModule
+    MatButtonModule,
+    TitleCasePipe
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
-  title = 'frontend';
   generatedFiles: GeneratedFile[] = [];
+  private subscription!: Subscription;
+  selectedPattern: string = 'singleton';
+
+  constructor(private patternSelectionService: PatternSelectionService) {}
+  
+  ngOnInit(): void {
+    this.subscription = this.patternSelectionService.selectedPattern$.subscribe(pattern => {
+      if (pattern) {
+        this.selectedPattern = pattern;
+      }
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.subscription?.unsubscribe();
+  }
 
   handleGeneratedFiles(files: GeneratedFile[]) {
     this.generatedFiles = files;

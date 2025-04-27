@@ -1,12 +1,10 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { CodeGenerationContext } from '../../models/code-generation-context';
 import { CodeGeneratorService } from '../../services/code-generator.service';
 import { GeneratedFile } from '../../models/generated-file';
-import { Subscription } from 'rxjs';
-import { PatternSelectionService } from '../../services/pattern-selection.service';
 import { PatternService } from '../../services/pattern.service';
 import { NgFor } from '@angular/common';
 
@@ -24,27 +22,16 @@ import { NgFor } from '@angular/common';
 export class ConfigPanelComponent {
   patternForm: FormGroup = new FormGroup({});
   variables: string[] = [];
-  selectedPattern: string | null = null;
-  private subscription!: Subscription;
+  @Input() selectedPattern: string = '';
   @Output() generatedFiles = new EventEmitter<GeneratedFile[]>();
 
   constructor(
-    private patternSelectionService: PatternSelectionService,
     private patternService: PatternService,
     private codeGeneratorService: CodeGeneratorService
   ) {}
 
   ngOnInit(): void {
-    this.subscription = this.patternSelectionService.selectedPattern$.subscribe(pattern => {
-      if (pattern) {
-        this.selectedPattern = pattern;
-        this.loadVariablesForPattern(pattern);
-      }
-    });
-  }
-
-  ngOnDestroy(): void {
-    this.subscription?.unsubscribe();
+    this.loadVariablesForPattern(this.selectedPattern);
   }
 
   loadVariablesForPattern(pattern: string) {
