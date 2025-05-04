@@ -23,7 +23,7 @@ export class ConfigPanelComponent {
   patternForm: FormGroup = new FormGroup({});
   variables: string[] = [];
   @Input() selectedPattern: string = '';
-  @Output() generatedFiles = new EventEmitter<GeneratedFile[]>();
+  @Output() filesGenerated = new EventEmitter<GeneratedFile[]>();
 
   constructor(
     private patternService: PatternService,
@@ -84,7 +84,7 @@ export class ConfigPanelComponent {
 
     this.codeGeneratorService.generateFiles(context).subscribe({
       next: (files: GeneratedFile[]) => {
-        this.generatedFiles.emit(files); 
+        this.filesGenerated.emit(files); 
       },
       error: (err) => console.error('Error generating code:', err)
     });
