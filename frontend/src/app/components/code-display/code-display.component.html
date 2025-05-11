@@ -1,5 +1,9 @@
 <mat-card class="code-display-card">
     <mat-card-content>
+      <div *ngIf="!generatedFiles || generatedFiles.length === 0" class="no-files-message">
+        <p>Available after configuring...</p>
+      </div>
+
       <mat-tab-group class="tabs">
         <mat-tab *ngFor="let file of generatedFiles" [label]="file.fileName">
           <div class="code-box">
