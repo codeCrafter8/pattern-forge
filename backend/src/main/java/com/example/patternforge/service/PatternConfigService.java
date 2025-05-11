@@ -12,7 +12,7 @@ import java.util.Set;
 @RequiredArgsConstructor
 @Slf4j
 @Service
-public class PatternService {
+public class PatternConfigService {
 
     private final TemplateReader templateReader;
     private final VariableExtractor variableExtractor;

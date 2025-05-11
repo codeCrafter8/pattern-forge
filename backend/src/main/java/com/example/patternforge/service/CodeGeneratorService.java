@@ -1,9 +1,8 @@
 package com.example.patternforge.service;
 
-import com.example.patternforge.factory.CodeGeneratorFactory;
-import com.example.patternforge.generator.GeneratedFile;
-import com.example.patternforge.generator.PatternGenerator;
-import com.example.patternforge.generator.context.CodeGenerationContext;
+import com.example.patternforge.dto.GeneratedFile;
+import com.example.patternforge.service.pattern.PatternContext;
+import com.example.patternforge.service.pattern.PatternGenerator;
 import freemarker.template.TemplateException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,16 +15,30 @@ import java.util.List;
 public class CodeGeneratorService {
     private final CodeGeneratorFactory codeGeneratorFactory;
 
-    private static final String CONTEXT_REGEX = "(?i)context";
+    private static final String CONTEXT_SUFFIX = "Context";
 
-    public List<GeneratedFile> generateFiles(
-            CodeGenerationContext context) throws IOException, TemplateException {
-
-        String pattern = context.getClass().getSimpleName().replaceAll(CONTEXT_REGEX, "");
-
-        PatternGenerator generator = codeGeneratorFactory.getGenerator(pattern);
+    public List<GeneratedFile> generateFiles(PatternContext context) throws IOException, TemplateException {
+        String patternName = convertContextClassToPatternName(context.getClass());
+        PatternGenerator generator = codeGeneratorFactory.getGenerator(patternName);
         generator.setContext(context);
 
         return generator.generateFiles();
+    }
+
+    private String convertContextClassToPatternName(Class<?> contextClass) {
+        String className = contextClass.getSimpleName();
+        String pattern = removeContextSuffix(className);
+        return convertCamelCaseToSpaces(pattern);
+    }
+
+    private String removeContextSuffix(String className) {
+        if (className.endsWith(CONTEXT_SUFFIX)) {
+            return className.substring(0, className.length() - CONTEXT_SUFFIX.length());
+        }
+        return className;
+    }
+
+    private String convertCamelCaseToSpaces(String className) {
+        return className.replaceAll("([a-z])([A-Z])", "$1 $2");
     }
 }
