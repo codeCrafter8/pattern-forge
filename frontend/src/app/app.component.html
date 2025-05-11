@@ -1,9 +1,11 @@
-<app-pattern-menu></app-pattern-menu>
+<app-pattern-menu
+    (patternSelected)="handlePatternSelection($event)">
+</app-pattern-menu>
 <div class="pattern-name">{{ selectedPattern | titlecase }}</div>
 <div class="main-content">
     <div class="row">
         <app-config-panel 
-            (generatedFiles)="handleGeneratedFiles($event)"
+            (filesGenerated)="handleFilesGenerated($event)"
             [selectedPattern]="selectedPattern">
         </app-config-panel>
         <app-code-display [generatedFiles]="generatedFiles"></app-code-display>
