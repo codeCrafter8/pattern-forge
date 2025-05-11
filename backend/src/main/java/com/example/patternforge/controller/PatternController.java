@@ -1,6 +1,6 @@
 package com.example.patternforge.controller;
 
-import com.example.patternforge.service.PatternService;
+import com.example.patternforge.service.PatternConfigService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,10 +15,10 @@ import java.util.Set;
 @RequestMapping("/api/v1/patterns")
 public class PatternController {
 
-    private final PatternService patternService;
+    private final PatternConfigService patternConfigService;
 
     @GetMapping("/{patternName}/config")
     public ResponseEntity<Set<String>> getPatternConfig(@PathVariable String patternName) {
-        return ResponseEntity.ok(patternService.getPatternConfig(patternName));
+        return ResponseEntity.ok(patternConfigService.getPatternConfig(patternName));
     }
 }

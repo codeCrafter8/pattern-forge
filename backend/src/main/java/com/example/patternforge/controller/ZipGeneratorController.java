@@ -1,6 +1,6 @@
 package com.example.patternforge.controller;
 
-import com.example.patternforge.generator.GeneratedFile;
+import com.example.patternforge.dto.GeneratedFile;
 import com.example.patternforge.service.ZipGeneratorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;

@@ -1,5 +1,6 @@
-package com.example.patternforge.generator.context;
+package com.example.patternforge.service.pattern.adapter;
 
+import com.example.patternforge.service.pattern.PatternContext;
 import jakarta.validation.constraints.NotBlank;
 
 public record AdapterContext(
@@ -7,5 +8,5 @@ public record AdapterContext(
         @NotBlank String adapterClassName,
         @NotBlank String targetInterfaceName,
         @NotBlank String adapteeClassName,
-        @NotBlank String adapteeMethodName) implements CodeGenerationContext {
+        @NotBlank String adapteeMethodName) implements PatternContext {
 }

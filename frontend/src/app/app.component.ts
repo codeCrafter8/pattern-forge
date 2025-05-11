@@ -4,7 +4,7 @@ import { ConfigPanelComponent } from './components/config-panel/config-panel.com
 import { CodeDisplayComponent } from './components/code-display/code-display.component';
 import { MatButtonModule } from '@angular/material/button';
 import { GeneratedFile } from './models/generated-file';
-import { TitleCasePipe } from '@angular/common';
+import { NgIf, TitleCasePipe } from '@angular/common';
 import { ZipDownloadService } from './services/zip-download.service';
 
 @Component({
@@ -14,7 +14,8 @@ import { ZipDownloadService } from './services/zip-download.service';
     ConfigPanelComponent, 
     CodeDisplayComponent,
     MatButtonModule,
-    TitleCasePipe
+    TitleCasePipe,
+    NgIf
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
@@ -29,6 +30,7 @@ export class AppComponent {
   
   handlePatternSelection(pattern: string) {
     this.selectedPattern = pattern;
+    this.generatedFiles = []; 
   }
 
   handleFilesGenerated(files: GeneratedFile[]) {
