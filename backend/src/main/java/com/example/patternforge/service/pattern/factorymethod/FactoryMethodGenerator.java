@@ -12,6 +12,8 @@ import lombok.Setter;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -41,32 +43,42 @@ public class FactoryMethodGenerator implements PatternGenerator {
             throw new IllegalArgumentException("%s pattern context not set.".formatted(name));
         }
 
-        Map<String, Object> model = Map.of(
+        Map<String, Object> sharedModel = Map.of(
                 "productInterfaceName", context.productInterfaceName(),
                 "productMethodName", context.productMethodName(),
-                "productClassName", context.productClassName(),
                 "creatorClassName", context.creatorClassName(),
-                "creatorMethodName", context.creatorMethodName(),
-                "concreteCreatorClassName", context.concreteCreatorClassName()
+                "creatorMethodName", context.creatorMethodName()
         );
 
-        return List.of(
-                GenerationUtils.generate(freemarkerConfig,
-                        context.productInterfaceName(),
-                        "%s/ProductInterface.ftl".formatted(name.toLowerCase()),
-                        model),
-                GenerationUtils.generate(freemarkerConfig,
-                        context.productClassName(),
-                        "%s/ConcreteProduct.ftl".formatted(name.toLowerCase()),
-                        model),
-                GenerationUtils.generate(freemarkerConfig,
-                        context.creatorClassName(),
-                        "%s/Creator.ftl".formatted(name.toLowerCase()),
-                        model),
-                GenerationUtils.generate(freemarkerConfig,
-                        context.concreteCreatorClassName(),
-                        "%s/ConcreteCreator.ftl".formatted(name.toLowerCase()),
-                        model)
-        );
+        List<GeneratedFile> files = new ArrayList<>();
+
+        files.add(GenerationUtils.generate(freemarkerConfig,
+                context.productInterfaceName(),
+                "%s/ProductInterface.ftl".formatted(name.toLowerCase()),
+                sharedModel));
+
+        files.add(GenerationUtils.generate(freemarkerConfig,
+                context.creatorClassName(),
+                "%s/Creator.ftl".formatted(name.toLowerCase()),
+                sharedModel));
+        
+        for (FactoryMethodContext.ProductVariant variant : context.productVariants()) {
+            Map<String, Object> variantModel = new HashMap<>(sharedModel);
+            variantModel.put("productClassName", variant.productClassName());
+            variantModel.put("concreteCreatorClassName", variant.concreteCreatorClassName());
+
+            files.add(GenerationUtils.generate(freemarkerConfig,
+                    variant.productClassName(),
+                    "%s/ConcreteProduct.ftl".formatted(name.toLowerCase()),
+                    variantModel));
+
+            files.add(GenerationUtils.generate(freemarkerConfig,
+                    variant.concreteCreatorClassName(),
+                    "%s/ConcreteCreator.ftl".formatted(name.toLowerCase()),
+                    variantModel));
+        }
+
+        return files;
     }
+
 }
