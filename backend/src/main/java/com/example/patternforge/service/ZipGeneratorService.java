@@ -1,6 +1,6 @@
 package com.example.patternforge.service;
 
-import com.example.patternforge.generator.GeneratedFile;
+import com.example.patternforge.dto.GeneratedFile;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;

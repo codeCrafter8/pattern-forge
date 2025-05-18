@@ -1,9 +1,9 @@
 .code-display-card {
-    width: 650px;
     padding: 3px;
     background-color: #f9f9f9;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
+    max-width: 670px;
 }
   
 .code-box {
@@ -16,4 +16,13 @@
     max-height: 300px;
     margin-bottom: 20px;
 }
+
+.no-files-message {
+    text-align: center;
+    font-size: 1.2em;
+    color: #888;
+    padding: 20px;
+    background-color: #f0f0f0;
+    border: 1px dashed #ddd;
+}  
   
