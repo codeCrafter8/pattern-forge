@@ -36,7 +36,9 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 export class ConfigPanelComponent {
   patternForm: FormGroup = new FormGroup({});
   singleVariables: string[] = [];
+  repeatableVariables: string[] = [];
   groupedVariables: VariableGroup[] = [];
+
   @Input() selectedPattern: string = '';
   @Output() filesGenerated = new EventEmitter<GeneratedFile[]>();
 
@@ -55,7 +57,8 @@ export class ConfigPanelComponent {
     this.patternService.getPatternVariables(pattern).subscribe({
       next: (result: VariableExtractionResult) => {
         this.singleVariables = result.singleVariables;
-        this.groupedVariables = result.groupedVariables;
+        this.repeatableVariables = result.repeatableVariables || [];
+        this.groupedVariables = result.groupedVariables || [];
         this.updateFormControls();
       },
       error: (err) => console.error('Failed to load pattern config:', err)
@@ -63,14 +66,19 @@ export class ConfigPanelComponent {
   }
 
   updateFormControls(): void {
-    // Update single variables
     this.singleVariables.forEach(variable => {
       if (!this.patternForm.contains(variable)) {
         this.patternForm.addControl(variable, new FormControl('', Validators.required));
       }
     });
 
-    // Update grouped variables
+    this.repeatableVariables.forEach(variable => {
+      if (!this.patternForm.contains(variable)) {
+        const formArray = new FormArray<FormControl>([new FormControl('', Validators.required)]);
+        this.patternForm.addControl(variable, formArray);
+      }
+    });
+
     this.groupedVariables.forEach(group => {
       if (!this.patternForm.contains(group.groupName)) {
         const formArray = new FormArray<FormGroup>([]);
@@ -79,13 +87,34 @@ export class ConfigPanelComponent {
       }
     });
 
-    // Remove unused controls
     Object.keys(this.patternForm.controls).forEach(controlName => {
-      if (!this.singleVariables.includes(controlName) && 
-          !this.groupedVariables.some(group => group.groupName === controlName)) {
+      if (
+        !this.singleVariables.includes(controlName) &&
+        !this.repeatableVariables.includes(controlName) &&
+        !this.groupedVariables.some(group => group.groupName === controlName)
+      ) {
         this.patternForm.removeControl(controlName);
       }
     });
+  }
+
+  getRepeatableFormArray(variableName: string): FormArray | null {
+    const control = this.patternForm.get(variableName);
+    return control instanceof FormArray ? control : null;
+  }
+
+  addRepeatableInstance(variableName: string): void {
+    const formArray = this.getRepeatableFormArray(variableName);
+    if (formArray) {
+      formArray.push(new FormControl('', Validators.required));
+    }
+  }
+
+  removeRepeatableInstance(variableName: string, index: number): void {
+    const formArray = this.getRepeatableFormArray(variableName);
+    if (formArray && formArray.length > 1) {
+      formArray.removeAt(index);
+    }
   }
 
   createGroupInstance(variables: string[]): FormGroup {
@@ -96,20 +125,20 @@ export class ConfigPanelComponent {
     return group;
   }
 
-  getFormArray(groupName: string): FormArray | null {
+  getGroupFormArray(groupName: string): FormArray | null {
     const control = this.patternForm.get(groupName);
     return control instanceof FormArray ? control : null;
   }
 
   addGroupInstance(group: VariableGroup): void {
-    const formArray = this.getFormArray(group.groupName);
+    const formArray = this.getGroupFormArray(group.groupName);
     if (formArray) {
       formArray.push(this.createGroupInstance(group.variables));
     }
   }
 
   removeGroupInstance(groupName: string, index: number): void {
-    const formArray = this.getFormArray(groupName);
+    const formArray = this.getGroupFormArray(groupName);
     if (formArray && formArray.length > 1) { 
       formArray.removeAt(index);
     }

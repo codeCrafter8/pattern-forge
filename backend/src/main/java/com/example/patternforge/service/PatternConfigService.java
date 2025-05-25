@@ -23,7 +23,7 @@ public class PatternConfigService {
 
             File[] templateFiles = templateReader.getTemplateFiles(patternName);
 
-            VariableExtractionResult variables = variableExtractor.extractVariables(templateFiles);
+            VariableExtractionResult variables = variableExtractor.extractVariables(templateFiles, patternName);
 
             log.info("Found variables {} for pattern: {}", variables, patternName);
 
