@@ -1,8 +1,8 @@
 package com.example.patternforge.controller;
 
-import com.example.patternforge.generator.GeneratedFile;
-import com.example.patternforge.generator.context.CodeGenerationContext;
+import com.example.patternforge.dto.GeneratedFile;
 import com.example.patternforge.service.CodeGeneratorService;
+import com.example.patternforge.service.pattern.PatternContext;
 import freemarker.template.TemplateException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +24,7 @@ public class CodeGeneratorController {
 
     @PostMapping("/generate")
     public ResponseEntity<List<GeneratedFile>> generateCode(
-            @RequestBody @Valid CodeGenerationContext context) throws TemplateException, IOException {
+            @RequestBody @Valid PatternContext context) throws TemplateException, IOException {
         List<GeneratedFile> result = codeGeneratorService.generateFiles(context);
 
         return ResponseEntity.ok(result);

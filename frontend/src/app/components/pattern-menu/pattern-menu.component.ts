@@ -21,7 +21,7 @@ export class PatternMenuComponent {
     },
     {
       name: 'Creational Patterns',
-      patternNames: ['Factory', 'Singleton']
+      patternNames: ['Factory Method', 'Singleton']
     }
   ];
   @Output() patternSelected = new EventEmitter<string>();

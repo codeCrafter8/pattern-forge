@@ -1,6 +1,6 @@
-package com.example.patternforge.factory;
+package com.example.patternforge.service;
 
-import com.example.patternforge.generator.PatternGenerator;
+import com.example.patternforge.service.pattern.PatternGenerator;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

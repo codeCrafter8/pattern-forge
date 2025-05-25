@@ -1,54 +1,66 @@
-@import '../../../variables';
-
-mat-card {
-    width: 300px;
-    padding: 10px;
-    background-color: #f9f9f9;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-}
-  
-mat-card-header {
-    background-color: $primary-color;
-    color: white;
-    padding: 7px;
-    border-radius: 8px 8px 0 0;
-    margin-bottom: 10px;
-}
-  
-mat-card-content {
-    padding: 6px;
+.configuration-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 10px;
+  margin-top: 5px;
+  font-size: 14px;
+  max-width: 315px;
 }
 
-mat-card-title {
-    font-size: 18px;
-}
-  
-.form-field {
-    width: 98%;
-    margin-bottom: 10px;
-    display: flex;
-    flex-direction: column;
-}
-  
-.form-field .label {
-    font-size: 14px;
-    color: #555;
-    padding: 3px 0;
-}
-  
-input {
-    width: 100%;
-    padding: 4px;
+.section-title {
+  margin: 16px 0;
+  color: rgba(0, 0, 0, 0.87);
 }
 
-button {
-    align-self: flex-end;
-    padding: 7px 20px;
-    font-size: 14px;
-    border-radius: 4px;
-    width: 100px;
-    margin-top: 10px;
-    border: 1px solid rgb(178, 178, 178);
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  margin-bottom: 16px;
 }
-  
+
+.tab-content-wrapper {
+  padding: 5px;
+}
+
+.form-array-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.variant-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 4px;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+}
+
+.group-tabs {
+  width: 100%;
+  overflow-x: auto; // Włącza przewijanie poziome
+}
+
+.variant-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.variant-title {
+  margin: 0;
+  font-weight: 500;
+}
+
+.add-variant-button {
+  align-self: flex-start;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+mat-card-actions {
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
+}

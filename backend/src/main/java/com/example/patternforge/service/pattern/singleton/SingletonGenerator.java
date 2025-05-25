@@ -1,7 +1,8 @@
-package com.example.patternforge.generator;
+package com.example.patternforge.service.pattern.singleton;
 
-import com.example.patternforge.generator.context.CodeGenerationContext;
-import com.example.patternforge.generator.context.SingletonContext;
+import com.example.patternforge.dto.GeneratedFile;
+import com.example.patternforge.service.pattern.PatternContext;
+import com.example.patternforge.service.pattern.PatternGenerator;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -21,12 +22,14 @@ import java.util.Map;
 @Component
 public class SingletonGenerator implements PatternGenerator {
 
+    private static final String JAVA_FILENAME = "%s.java";
+
     private final String name = "SINGLETON";
 
     private final Configuration freemarkerConfig;
     private SingletonContext context;
 
-    public void setContext(CodeGenerationContext context) {
+    public void setContext(PatternContext context) {
         if (!(context instanceof SingletonContext singletonCtx)) {
             throw new IllegalArgumentException("Invalid context type.");
         }
@@ -37,14 +40,14 @@ public class SingletonGenerator implements PatternGenerator {
     @Override
     public List<GeneratedFile> generateFiles() throws IOException, TemplateException {
         if (context == null) {
-            throw new IllegalArgumentException("Pattern context not set.");
+            throw new IllegalArgumentException("%s pattern context not set.".formatted(name));
         }
 
         Map<String, Object> model = Map.of("className", context.className());
 
-        Template template = freemarkerConfig.getTemplate("singleton/Singleton.ftl");
+        Template template = freemarkerConfig.getTemplate("%s/Singleton.ftl".formatted(name.toLowerCase()));
         String content = FreeMarkerTemplateUtils.processTemplateIntoString(template, model);
 
-        return List.of(new GeneratedFile(context.className() + ".java", content));
+        return List.of(new GeneratedFile(JAVA_FILENAME.formatted(context.className()), content));
     }
 }
