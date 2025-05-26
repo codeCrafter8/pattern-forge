@@ -9,10 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -21,14 +18,17 @@ import java.util.regex.Pattern;
 public class VariableExtractor {
 
     private static final Pattern VARIABLE_PATTERN = Pattern.compile("\\$\\{([a-zA-Z0-9_.]+)}");
-    private static final List<VariableGroup> PREDEFINED_GROUPS = List.of(
-            new VariableGroup("productVariants", Set.of("concreteCreatorClassName", "productClassName"))
-    );
 
-    public VariableExtractionResult extractVariables(File[] templateFiles) throws IOException {
+    private static final Map<String, List<String>> PREDEFINED_REPEATABLES = Map.of(
+            "observer", List.of("concreteObserverClassName"));
+    private static final Map<String, List<VariableGroup>> PREDEFINED_GROUPS = Map.of(
+            "factory method",
+            List.of(new VariableGroup("productVariants", Set.of("concreteCreatorClassName", "productClassName"))));
+
+    public VariableExtractionResult extractVariables(File[] templateFiles, String patternName) throws IOException {
         Set<String> allVariables = extractAllVariables(templateFiles);
 
-        return processVariableGroups(allVariables);
+        return processVariables(allVariables, patternName);
     }
 
     private Set<String> extractAllVariables(File[] templateFiles) throws IOException {
@@ -62,17 +62,34 @@ public class VariableExtractor {
         return variables;
     }
 
-    private VariableExtractionResult processVariableGroups(Set<String> allVariables) {
+    private VariableExtractionResult processVariables(Set<String> allVariables, String patternName) {
         List<VariableGroup> matchedGroups = new ArrayList<>();
+        Set<String> matchedRepeatables = new HashSet<>();
 
-        for (VariableGroup group : PREDEFINED_GROUPS) {
-            if (allVariables.containsAll(group.variables())) {
-                allVariables.removeAll(group.variables());
-                matchedGroups.add(group);
+        List<VariableGroup> groups = PREDEFINED_GROUPS.get(patternName.toLowerCase());
+        if (groups != null) {
+            for (VariableGroup group : groups) {
+                if (allVariables.containsAll(group.variables())) {
+                    allVariables.removeAll(group.variables());
+                    matchedGroups.add(group);
+                }
             }
         }
 
-        return new VariableExtractionResult(allVariables, matchedGroups);
+        List<String> repeatables = PREDEFINED_REPEATABLES.get(patternName.toLowerCase());
+        if (repeatables != null) {
+            for (String repeatable : repeatables) {
+                if (allVariables.contains(repeatable)) {
+                    allVariables.remove(repeatable);
+                    matchedRepeatables.add(repeatable);
+                }
+            }
+        }
+
+        return new VariableExtractionResult(
+                allVariables,
+                matchedRepeatables,
+                matchedGroups);
     }
 
 }

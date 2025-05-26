@@ -8,15 +8,9 @@
   max-width: 315px;
 }
 
-.section-title {
-  margin: 16px 0;
-  color: rgba(0, 0, 0, 0.87);
-}
-
 .form-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  margin-bottom: 16px;
 }
 
 .tab-content-wrapper {
@@ -28,7 +22,7 @@
   flex-direction: column;
 }
 
-.variant-form {
+.tab-form {
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -37,23 +31,23 @@
   border-radius: 4px;
 }
 
-.group-tabs {
+.tabs {
   width: 100%;
-  overflow-x: auto; // Włącza przewijanie poziome
+  overflow-x: auto; 
 }
 
-.variant-header {
+.tab-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.variant-title {
+.tab-title {
   margin: 0;
   font-weight: 500;
 }
 
-.add-variant-button {
+.add-button {
   align-self: flex-start;
 }
 
