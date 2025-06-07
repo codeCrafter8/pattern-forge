@@ -3,6 +3,7 @@ package com.example.patternforge.service.pattern.factorymethod;
 import com.example.patternforge.dto.GeneratedFile;
 import com.example.patternforge.service.pattern.PatternContext;
 import com.example.patternforge.service.pattern.PatternGenerator;
+import com.example.patternforge.service.pattern.ProgrammingLanguage;
 import com.example.patternforge.util.GenerationUtils;
 import freemarker.template.Configuration;
 import freemarker.template.TemplateException;
@@ -25,6 +26,9 @@ public class FactoryMethodGenerator implements PatternGenerator {
 
     private final String name = "FACTORY METHOD";
 
+    private static final String JAVA_EXTENSION = ".java";
+    private static final String CPP_EXTENSION = ".cpp";
+
     private final Configuration freemarkerConfig;
     private FactoryMethodContext context;
 
@@ -33,7 +37,6 @@ public class FactoryMethodGenerator implements PatternGenerator {
         if (!(context instanceof FactoryMethodContext fmContext)) {
             throw new IllegalArgumentException("Invalid context type.");
         }
-
         this.context = fmContext;
     }
 
@@ -50,35 +53,51 @@ public class FactoryMethodGenerator implements PatternGenerator {
                 "creatorMethodName", context.creatorMethodName()
         );
 
+        String language = context.language().toLowerCase();
+        String extension = language.equals(ProgrammingLanguage.CPP.getValue()) ?
+                CPP_EXTENSION : JAVA_EXTENSION;
+        String baseTemplatePath = "%s/%s/".formatted(name.toLowerCase(), language);
+
         List<GeneratedFile> files = new ArrayList<>();
 
-        files.add(GenerationUtils.generate(freemarkerConfig,
+        files.add(GenerationUtils.generate(
+                freemarkerConfig,
                 context.productInterfaceName(),
-                "%s/ProductInterface.ftl".formatted(name.toLowerCase()),
-                sharedModel));
+                baseTemplatePath + "ProductInterface.ftl",
+                sharedModel,
+                extension
+        ));
 
-        files.add(GenerationUtils.generate(freemarkerConfig,
+        files.add(GenerationUtils.generate(
+                freemarkerConfig,
                 context.creatorClassName(),
-                "%s/Creator.ftl".formatted(name.toLowerCase()),
-                sharedModel));
-        
+                baseTemplatePath + "Creator.ftl",
+                sharedModel,
+                extension
+        ));
+
         for (FactoryMethodContext.ProductVariant variant : context.productVariants()) {
             Map<String, Object> variantModel = new HashMap<>(sharedModel);
             variantModel.put("productClassName", variant.productClassName());
             variantModel.put("concreteCreatorClassName", variant.concreteCreatorClassName());
 
-            files.add(GenerationUtils.generate(freemarkerConfig,
+            files.add(GenerationUtils.generate(
+                    freemarkerConfig,
                     variant.productClassName(),
-                    "%s/ConcreteProduct.ftl".formatted(name.toLowerCase()),
-                    variantModel));
+                    baseTemplatePath + "ConcreteProduct.ftl",
+                    variantModel,
+                    extension
+            ));
 
-            files.add(GenerationUtils.generate(freemarkerConfig,
+            files.add(GenerationUtils.generate(
+                    freemarkerConfig,
                     variant.concreteCreatorClassName(),
-                    "%s/ConcreteCreator.ftl".formatted(name.toLowerCase()),
-                    variantModel));
+                    baseTemplatePath + "ConcreteCreator.ftl",
+                    variantModel,
+                    extension
+            ));
         }
 
         return files;
     }
-
 }

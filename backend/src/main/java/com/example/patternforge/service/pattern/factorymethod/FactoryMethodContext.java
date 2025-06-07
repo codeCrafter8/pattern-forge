@@ -11,11 +11,17 @@ public record FactoryMethodContext(
         @NotBlank String productMethodName,
         @NotBlank String creatorClassName,
         @NotBlank String creatorMethodName,
-        @NotEmpty List<ProductVariant> productVariants) implements PatternContext {
+        @NotEmpty List<ProductVariant> productVariants,
+        @NotBlank String language) implements PatternContext {
 
     public record ProductVariant(
             @NotBlank String productClassName,
             @NotBlank String concreteCreatorClassName
     ) {
+    }
+
+    @Override
+    public String getLanguage() {
+        return language;
     }
 }

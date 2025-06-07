@@ -8,5 +8,12 @@ public record AdapterContext(
         @NotBlank String adapterClassName,
         @NotBlank String targetInterfaceName,
         @NotBlank String adapteeClassName,
-        @NotBlank String adapteeMethodName) implements PatternContext {
+        @NotBlank String adapteeMethodName,
+        @NotBlank String language) implements PatternContext {
+
+    @Override
+    public String getLanguage() {
+        return language;
+    }
+
 }

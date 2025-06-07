@@ -14,17 +14,16 @@ import java.util.Map;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class GenerationUtils {
 
-    private static final String JAVA_EXTENSION = ".java";
-
     public static GeneratedFile generate(
             Configuration freemarkerConfig,
             String fileName,
             String templatePath,
-            Map<String, Object> model) throws IOException, TemplateException {
+            Map<String, Object> model,
+            String extension) throws IOException, TemplateException {
 
         Template template = freemarkerConfig.getTemplate(templatePath);
         String content = FreeMarkerTemplateUtils.processTemplateIntoString(template, model);
 
-        return new GeneratedFile(fileName + JAVA_EXTENSION, content);
+        return new GeneratedFile(fileName + extension, content);
     }
 }

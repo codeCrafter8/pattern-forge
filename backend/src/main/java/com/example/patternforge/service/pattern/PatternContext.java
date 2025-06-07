@@ -19,4 +19,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
         @JsonSubTypes.Type(value = ObserverContext.class, name = "observer")
 })
 public interface PatternContext {
+
+    String getLanguage();
+
 }
