@@ -3,6 +3,7 @@ package com.example.patternforge.service.pattern.adapter;
 import com.example.patternforge.dto.GeneratedFile;
 import com.example.patternforge.service.pattern.PatternContext;
 import com.example.patternforge.service.pattern.PatternGenerator;
+import com.example.patternforge.service.pattern.ProgrammingLanguage;
 import com.example.patternforge.util.GenerationUtils;
 import freemarker.template.Configuration;
 import freemarker.template.TemplateException;
@@ -22,6 +23,9 @@ import java.util.Map;
 public class AdapterGenerator implements PatternGenerator {
 
     private final String name = "ADAPTER";
+
+    private static final String JAVA_EXTENSION = ".java";
+    private static final String CPP_EXTENSION = ".cpp";
 
     private final Configuration freemarkerConfig;
     private AdapterContext context;
@@ -48,23 +52,33 @@ public class AdapterGenerator implements PatternGenerator {
                 "adapteeMethodName", context.adapteeMethodName()
         );
 
+        String language = context.language().toLowerCase();
+        String extension = language.equals(ProgrammingLanguage.CPP.getValue()) ?
+                CPP_EXTENSION : JAVA_EXTENSION;
+        String baseTemplatePath = "%s/%s/".formatted(name.toLowerCase(), language);
+
         return List.of(
                 GenerationUtils.generate(freemarkerConfig,
                         context.targetInterfaceName(),
-                        "%s/Target.ftl".formatted(name.toLowerCase()),
-                        model),
+                        baseTemplatePath + "Target.ftl",
+                        model,
+                        extension),
                 GenerationUtils.generate(freemarkerConfig,
                         context.adapteeClassName(),
-                        "%s/Adaptee.ftl".formatted(name.toLowerCase()),
-                        model),
+                        baseTemplatePath + "Adaptee.ftl",
+                        model,
+                        extension),
                 GenerationUtils.generate(freemarkerConfig,
                         context.adapterClassName(),
-                        "%s/Adapter.ftl".formatted(name.toLowerCase()),
-                        model),
+                        baseTemplatePath + "Adapter.ftl",
+                        model,
+                        extension),
                 GenerationUtils.generate(freemarkerConfig,
                         context.clientClassName(),
-                        "%s/Client.ftl".formatted(name.toLowerCase()),
-                        model)
+                        baseTemplatePath + "Client.ftl",
+                        model,
+                        extension)
         );
     }
+
 }

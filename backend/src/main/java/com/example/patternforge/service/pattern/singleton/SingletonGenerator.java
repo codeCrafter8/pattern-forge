@@ -3,6 +3,7 @@ package com.example.patternforge.service.pattern.singleton;
 import com.example.patternforge.dto.GeneratedFile;
 import com.example.patternforge.service.pattern.PatternContext;
 import com.example.patternforge.service.pattern.PatternGenerator;
+import com.example.patternforge.service.pattern.ProgrammingLanguage;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -22,9 +23,10 @@ import java.util.Map;
 @Component
 public class SingletonGenerator implements PatternGenerator {
 
-    private static final String JAVA_FILENAME = "%s.java";
-
     private final String name = "SINGLETON";
+
+    private static final String JAVA_FILENAME = "%s.java";
+    private static final String CPP_FILENAME = "%s.cpp";
 
     private final Configuration freemarkerConfig;
     private SingletonContext context;
@@ -45,9 +47,16 @@ public class SingletonGenerator implements PatternGenerator {
 
         Map<String, Object> model = Map.of("className", context.className());
 
-        Template template = freemarkerConfig.getTemplate("%s/Singleton.ftl".formatted(name.toLowerCase()));
+        String language = context.language().toLowerCase();
+        String templatePath = "%s/%s/Singleton.ftl".formatted(name.toLowerCase(), language);
+        Template template = freemarkerConfig.getTemplate(templatePath);
+
         String content = FreeMarkerTemplateUtils.processTemplateIntoString(template, model);
 
-        return List.of(new GeneratedFile(JAVA_FILENAME.formatted(context.className()), content));
+        String fileName = (language.equals(ProgrammingLanguage.CPP.getValue()) ? CPP_FILENAME : JAVA_FILENAME)
+                .formatted(context.className());
+
+        return List.of(new GeneratedFile(fileName, content));
     }
+
 }

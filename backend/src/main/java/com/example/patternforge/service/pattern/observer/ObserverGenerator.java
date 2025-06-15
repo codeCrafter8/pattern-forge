@@ -3,6 +3,7 @@ package com.example.patternforge.service.pattern.observer;
 import com.example.patternforge.dto.GeneratedFile;
 import com.example.patternforge.service.pattern.PatternContext;
 import com.example.patternforge.service.pattern.PatternGenerator;
+import com.example.patternforge.service.pattern.ProgrammingLanguage;
 import com.example.patternforge.util.GenerationUtils;
 import freemarker.template.Configuration;
 import freemarker.template.TemplateException;
@@ -25,6 +26,9 @@ public class ObserverGenerator implements PatternGenerator {
 
     private final String name = "OBSERVER";
 
+    private static final String JAVA_EXTENSION = ".java";
+    private static final String CPP_EXTENSION = ".cpp";
+
     private final Configuration freemarkerConfig;
     private ObserverContext context;
 
@@ -42,38 +46,47 @@ public class ObserverGenerator implements PatternGenerator {
             throw new IllegalArgumentException("%s pattern context not set.".formatted(name));
         }
 
-        Map<String, Object> sharedModel = Map.of(
+        Map<String, Object> model = Map.of(
                 "subjectInterfaceName", context.subjectInterfaceName(),
                 "observerInterfaceName", context.observerInterfaceName(),
                 "updateMethodName", context.updateMethodName(),
                 "concreteSubjectClassName", context.concreteSubjectClassName()
         );
 
+        String language = context.language().toLowerCase();
+        String extension = language.equals(ProgrammingLanguage.CPP.getValue()) ?
+                CPP_EXTENSION : JAVA_EXTENSION;
+        String baseTemplatePath = "%s/%s/".formatted(name.toLowerCase(), language);
+
         List<GeneratedFile> files = new ArrayList<>();
 
         files.add(GenerationUtils.generate(freemarkerConfig,
                 context.subjectInterfaceName(),
-                "%s/SubjectInterface.ftl".formatted(name.toLowerCase()),
-                sharedModel));
+                baseTemplatePath + "SubjectInterface.ftl",
+                model,
+                extension));
 
         files.add(GenerationUtils.generate(freemarkerConfig,
                 context.observerInterfaceName(),
-                "%s/ObserverInterface.ftl".formatted(name.toLowerCase()),
-                sharedModel));
+                baseTemplatePath + "ObserverInterface.ftl",
+                model,
+                extension));
 
         files.add(GenerationUtils.generate(freemarkerConfig,
                 context.concreteSubjectClassName(),
-                "%s/ConcreteSubject.ftl".formatted(name.toLowerCase()),
-                sharedModel));
+                baseTemplatePath + "ConcreteSubject.ftl",
+                model,
+                extension));
 
         for (String concreteObserver : context.concreteObserverClassName()) {
-            Map<String, Object> observerModel = new HashMap<>(sharedModel);
+            Map<String, Object> observerModel = new HashMap<>(model);
             observerModel.put("concreteObserverClassName", concreteObserver);
 
             files.add(GenerationUtils.generate(freemarkerConfig,
                     concreteObserver,
-                    "%s/ConcreteObserver.ftl".formatted(name.toLowerCase()),
-                    observerModel));
+                    baseTemplatePath + "ConcreteObserver.ftl",
+                    observerModel,
+                    extension));
         }
 
         return files;

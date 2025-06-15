@@ -2,9 +2,19 @@
   <mat-card-header>
     <mat-card-title>Configuration Panel</mat-card-title>
   </mat-card-header>
-  
+
   <mat-card-content>
     <form [formGroup]="patternForm" class="configuration-form">
+
+      <mat-form-field appearance="fill">
+      <mat-label>Language</mat-label>
+      <mat-select formControlName="language">
+        <mat-option *ngFor="let lang of availableLanguages" [value]="lang.value">
+          {{ lang.viewValue }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
       <div class="single-variables-section">
         <div class="form-grid">
           <div class="form-field" *ngFor="let variable of singleVariables">

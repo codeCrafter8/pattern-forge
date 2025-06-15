@@ -14,6 +14,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatSelectModule } from '@angular/material/select';
 
 @Component({
   selector: 'app-config-panel',
@@ -28,13 +29,22 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatIconModule,
     MatFormFieldModule,
     MatInputModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatSelectModule
   ],
   templateUrl: './config-panel.component.html',
   styleUrls: ['./config-panel.component.scss']
 })
 export class ConfigPanelComponent {
-  patternForm: FormGroup = new FormGroup({});
+  availableLanguages = [
+    { value: 'java', viewValue: 'Java' },
+    { value: 'cpp', viewValue: 'C++' }
+  ];
+
+  patternForm: FormGroup = new FormGroup({
+    language: new FormControl(this.availableLanguages[0].value, Validators.required)
+  });
+
   singleVariables: string[] = [];
   repeatableVariables: string[] = [];
   groupedVariables: VariableGroup[] = [];
@@ -89,6 +99,7 @@ export class ConfigPanelComponent {
 
     Object.keys(this.patternForm.controls).forEach(controlName => {
       if (
+        controlName !== 'language' &&
         !this.singleVariables.includes(controlName) &&
         !this.repeatableVariables.includes(controlName) &&
         !this.groupedVariables.some(group => group.groupName === controlName)
@@ -157,8 +168,6 @@ export class ConfigPanelComponent {
       this.markAllAsTouched();
       return;
     }
-
-    console.log(this.patternForm.value);
 
     const context: CodeGenerationContext = {
       patternName: this.selectedPattern,

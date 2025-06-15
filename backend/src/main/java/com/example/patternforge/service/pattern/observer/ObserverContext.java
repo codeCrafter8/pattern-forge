@@ -11,6 +11,12 @@ public record ObserverContext(
         @NotBlank String observerInterfaceName,
         @NotBlank String updateMethodName,
         @NotBlank String concreteSubjectClassName,
-        @NotEmpty List<String> concreteObserverClassName
-) implements PatternContext {
+        @NotEmpty List<String> concreteObserverClassName,
+        @NotBlank String language) implements PatternContext {
+
+    @Override
+    public String getLanguage() {
+        return language;
+    }
+
 }
