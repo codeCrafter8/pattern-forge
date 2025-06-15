@@ -15,6 +15,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSelectModule } from '@angular/material/select';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @Component({
   selector: 'app-config-panel',
@@ -30,7 +31,8 @@ import { MatSelectModule } from '@angular/material/select';
     MatFormFieldModule,
     MatInputModule,
     MatTooltipModule,
-    MatSelectModule
+    MatSelectModule,
+    MatCheckboxModule
   ],
   templateUrl: './config-panel.component.html',
   styleUrls: ['./config-panel.component.scss']
@@ -48,6 +50,7 @@ export class ConfigPanelComponent {
   singleVariables: string[] = [];
   repeatableVariables: string[] = [];
   groupedVariables: VariableGroup[] = [];
+  booleanVariables: string[] = [];
 
   @Input() selectedPattern: string = '';
   @Output() filesGenerated = new EventEmitter<GeneratedFile[]>();
@@ -69,6 +72,7 @@ export class ConfigPanelComponent {
         this.singleVariables = result.singleVariables;
         this.repeatableVariables = result.repeatableVariables || [];
         this.groupedVariables = result.groupedVariables || [];
+        this.booleanVariables = result.booleanVariables || [];
         this.updateFormControls();
       },
       error: (err) => console.error('Failed to load pattern config:', err)
@@ -97,12 +101,19 @@ export class ConfigPanelComponent {
       }
     });
 
+    this.booleanVariables.forEach(variable => {
+      if (!this.patternForm.contains(variable)) {
+        this.patternForm.addControl(variable, new FormControl(false)); 
+      }
+    });
+
     Object.keys(this.patternForm.controls).forEach(controlName => {
       if (
         controlName !== 'language' &&
         !this.singleVariables.includes(controlName) &&
         !this.repeatableVariables.includes(controlName) &&
-        !this.groupedVariables.some(group => group.groupName === controlName)
+        !this.groupedVariables.some(group => group.groupName === controlName) &&
+        !this.booleanVariables.includes(controlName)
       ) {
         this.patternForm.removeControl(controlName);
       }
