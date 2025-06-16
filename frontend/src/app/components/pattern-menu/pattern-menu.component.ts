@@ -13,11 +13,11 @@ export class PatternMenuComponent {
   patternTypes = [
     {
       name: 'Structural Patterns',
-      patternNames: ['Adapter']
+      patternNames: ['Adapter', 'Composite']
     },
     {
       name: 'Behavioral Patterns',
-      patternNames: ['Observer']
+      patternNames: ['Observer', 'Memento']
     },
     {
       name: 'Creational Patterns',

@@ -18,12 +18,19 @@ import java.util.regex.Pattern;
 public class VariableExtractor {
 
     private static final Pattern VARIABLE_PATTERN = Pattern.compile("\\$\\{([a-zA-Z0-9_.]+)}");
+    private static final Pattern IF_PATTERN = Pattern.compile("<#(if|elseif)\\s+([a-zA-Z0-9_.]+)>");
 
     private static final Map<String, List<String>> PREDEFINED_REPEATABLES = Map.of(
             "observer", List.of("concreteObserverClassName"));
+
     private static final Map<String, List<VariableGroup>> PREDEFINED_GROUPS = Map.of(
             "factory method",
             List.of(new VariableGroup("productVariants", Set.of("concreteCreatorClassName", "productClassName"))));
+
+    private static final Map<String, List<String>> PREDEFINED_BOOLEANS = Map.of(
+            "memento", List.of("undoEnabled")
+    );
+
 
     public VariableExtractionResult extractVariables(File[] templateFiles, String patternName) throws IOException {
         Set<String> allVariables = extractAllVariables(templateFiles);
@@ -52,11 +59,16 @@ public class VariableExtractor {
     }
 
     private Set<String> extractVariablesFromContent(String content) {
-        Matcher matcher = VARIABLE_PATTERN.matcher(content);
         Set<String> variables = new HashSet<>();
 
-        while (matcher.find()) {
-            variables.add(matcher.group(1));
+        Matcher variableMatcher = VARIABLE_PATTERN.matcher(content);
+        while (variableMatcher.find()) {
+            variables.add(variableMatcher.group(1));
+        }
+
+        Matcher ifMatcher = IF_PATTERN.matcher(content);
+        while (ifMatcher.find()) {
+            variables.add(ifMatcher.group(2));
         }
 
         return variables;
@@ -65,6 +77,7 @@ public class VariableExtractor {
     private VariableExtractionResult processVariables(Set<String> allVariables, String patternName) {
         List<VariableGroup> matchedGroups = new ArrayList<>();
         Set<String> matchedRepeatables = new HashSet<>();
+        Set<String> matchedBooleans = new HashSet<>();
 
         List<VariableGroup> groups = PREDEFINED_GROUPS.get(patternName.toLowerCase());
         if (groups != null) {
@@ -86,10 +99,21 @@ public class VariableExtractor {
             }
         }
 
+        List<String> booleanVars = PREDEFINED_BOOLEANS.get(patternName.toLowerCase());
+        if (booleanVars != null) {
+            for (String boolVar : booleanVars) {
+                if (allVariables.contains(boolVar)) {
+                    allVariables.remove(boolVar);
+                    matchedBooleans.add(boolVar);
+                }
+            }
+        }
+
         return new VariableExtractionResult(
                 allVariables,
                 matchedRepeatables,
-                matchedGroups);
+                matchedGroups,
+                matchedBooleans);
     }
 
 }
