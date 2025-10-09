@@ -13,9 +13,10 @@ public class TemplateReader {
 
     private static final String TEMPLATES_DIR = "templates";
     private static final String TEMPLATE_EXTENSION = ".ftl";
+    private static final String JAVA_DIR = "java";
 
     public File[] getTemplateFiles(String patternName) throws IOException {
-        String templatePath = TEMPLATES_DIR + "/" + patternName;
+        String templatePath = String.format("%s/%s/%s/", TEMPLATES_DIR, patternName, JAVA_DIR);
         ClassPathResource patternDir = new ClassPathResource(templatePath);
 
         if (!patternDir.exists()) {

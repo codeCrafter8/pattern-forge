@@ -1,6 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { NgFor } from '@angular/common';
-import { PatternSelectionService } from '../../services/pattern-selection.service';
 
 @Component({
   selector: 'app-pattern-menu',
@@ -14,22 +13,20 @@ export class PatternMenuComponent {
   patternTypes = [
     {
       name: 'Structural Patterns',
-      patternNames: ['Adapter']
+      patternNames: ['Adapter', 'Composite']
     },
     {
       name: 'Behavioral Patterns',
-      patternNames: ['Observer']
+      patternNames: ['Observer', 'Memento']
     },
     {
       name: 'Creational Patterns',
-      patternNames: ['Factory', 'Singleton']
+      patternNames: ['Factory Method', 'Singleton']
     }
   ];
-
-  constructor(private patternSelectionService: PatternSelectionService) {}
+  @Output() patternSelected = new EventEmitter<string>();
 
   selectPattern(patternName: string) {
-    this.patternSelectionService.selectPattern(patternName.toLowerCase());
+    this.patternSelected.emit(patternName.toLowerCase());
   }
-  
 }

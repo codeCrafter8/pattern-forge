@@ -1,15 +1,133 @@
 <mat-card>
-    <mat-card-header>
-      <mat-card-title>Congifurer</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      <form [formGroup]="patternForm">
-        <div class="form-field" *ngFor="let variable of variables">
-          <span class="label">{{ formatVariableName(variable) }}</span>
-          <input [formControlName]="variable" [placeholder]="'Enter ' + variable" />
+  <mat-card-header>
+    <mat-card-title>Configuration Panel</mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content>
+    <form [formGroup]="patternForm" class="configuration-form">
+
+      <mat-form-field appearance="fill">
+        <mat-label>Language</mat-label>
+        <mat-select formControlName="language">
+          <mat-option *ngFor="let lang of availableLanguages" [value]="lang.value">
+            {{ lang.viewValue }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <div *ngIf="singleVariables.length > 0">
+        <div *ngFor="let variable of singleVariables">
+          <mat-form-field appearance="outline">
+            <mat-label>{{ formatName(variable) }}</mat-label>
+            <input matInput [formControlName]="variable" [placeholder]="'Enter ' + formatName(variable)" />
+          </mat-form-field>
         </div>
-      </form>
-    </mat-card-content>
-    <button mat-raised-button (click)="configure()">Configure</button>
+      </div> 
+
+      <div *ngIf="booleanVariables.length > 0" class="checkbox-section">
+        <div *ngFor="let variable of booleanVariables">
+          <mat-checkbox [formControlName]="variable">
+            {{ formatName(variable) }}
+          </mat-checkbox>
+        </div>
+      </div>
+
+      <div *ngIf="repeatableVariables.length > 0">
+        <mat-tab-group animationDuration="0ms" class="tabs">
+          <mat-tab *ngFor="let variable of repeatableVariables" [label]="formatName(variable)">
+            <div class="tab-content-wrapper">
+              <ng-container *ngIf="getRepeatableFormArray(variable) as formArray">
+                <div [formArrayName]="variable" class="form-array-container">
+                  <mat-tab-group animationDuration="0ms">
+                    <mat-tab *ngFor="let control of formArray.controls; let i = index" 
+                            [label]="'Instance ' + (i + 1)">
+                      <div class="tab-form">
+                        <div class="tab-header">
+                          <h4 class="tab-title">Instance {{ i + 1 }}</h4>
+                          <button mat-icon-button color="warn" 
+                                  (click)="removeRepeatableInstance(variable, i)"
+                                  matTooltip="Remove instance">
+                            <mat-icon>delete</mat-icon>
+                          </button>
+                        </div>
+                        
+                        <div class="form-grid">
+                          <div class="form-field">
+                            <mat-form-field appearance="outline">
+                              <mat-label>{{ formatName(variable) }}</mat-label>
+                              <input matInput [formControl]="$any(formArray.at(i))" 
+                                    [placeholder]="'Enter ' + formatName(variable)" />
+                            </mat-form-field>
+                          </div>
+                        </div>
+                      </div>
+                    </mat-tab>
+                  </mat-tab-group>
+
+                  <button mat-raised-button color="primary" 
+                          (click)="addRepeatableInstance(variable)"
+                          class="add-button">
+                    <mat-icon>add</mat-icon>
+                    Add Instance
+                  </button>
+                </div>
+              </ng-container>
+            </div>
+          </mat-tab>
+        </mat-tab-group>
+      </div>
+
+      <div *ngIf="groupedVariables.length > 0">
+        <mat-tab-group animationDuration="0ms" class="tabs">
+          <mat-tab *ngFor="let group of groupedVariables" [label]="formatName(group.groupName)">
+            <div class="tab-content-wrapper">
+              <ng-container *ngIf="getGroupFormArray(group.groupName) as formArray">
+                <div [formArrayName]="group.groupName" class="form-array-container">
+                  <mat-tab-group animationDuration="0ms">
+                    <mat-tab *ngFor="let groupForm of formArray.controls; let i = index" 
+                            [label]="'Variant ' + (i + 1)">
+                      <div [formGroupName]="i" class="tab-form">
+                        <div class="tab-header">
+                          <h4 class="tab-title">Variant {{ i + 1 }}</h4>
+                          <button mat-icon-button color="warn" 
+                                  (click)="removeGroupInstance(group.groupName, i)"
+                                  matTooltip="Remove variant">
+                            <mat-icon>delete</mat-icon>
+                          </button>
+                        </div>
+                        
+                        <div class="form-grid">
+                          <div *ngFor="let variable of group.variables" class="form-field">
+                            <mat-form-field appearance="outline">
+                              <mat-label>{{ formatName(variable) }}</mat-label>
+                              <input matInput [formControlName]="variable" 
+                                     [placeholder]="'Enter ' + formatName(variable)" />
+                            </mat-form-field>
+                          </div>
+                        </div>
+                      </div>
+                    </mat-tab>
+                  </mat-tab-group>
+
+                  <button mat-raised-button color="primary" 
+                          (click)="addGroupInstance(group)"
+                          class="add-button">
+                    <mat-icon>add</mat-icon>
+                    Add Variant
+                  </button>
+                </div>
+              </ng-container>
+            </div>
+          </mat-tab>
+        </mat-tab-group>
+      </div>
+    </form>
+  </mat-card-content>
+
+  <mat-card-actions align="end">
+    <button mat-raised-button color="primary" (click)="configure()">
+      <mat-icon>build</mat-icon>
+      Generate Code
+    </button>
+  </mat-card-actions>
 </mat-card>
-  
