@@ -3,6 +3,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatTabsModule } from '@angular/material/tabs'; 
 import { GeneratedFile } from '../../models/generated-file';
 import { NgFor, NgIf } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-code-display',
@@ -10,7 +11,8 @@ import { NgFor, NgIf } from '@angular/common';
     MatCardModule,
     MatTabsModule,
     NgFor,
-    NgIf
+    NgIf,
+    FormsModule
   ],
   templateUrl: './code-display.component.html',
   styleUrl: './code-display.component.scss'

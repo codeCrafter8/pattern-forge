@@ -25,3 +25,31 @@
     border: 1px dashed #ddd;
 }  
   
+.code-box {
+  position: relative;
+  height: 500px; // Lub inna wysokość pasująca do layoutu
+  border: 1px solid #ccc;
+  border-top: none; // Jeśli tab-group ma już linię
+}
+
+.code-editor {
+  width: 100%;
+  height: 100%;
+  resize: none; // Wyłączamy systemowe przeciąganie rogu
+  border: none;
+  outline: none;
+  padding: 15px;
+  
+  // Stylowanie pod kod
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+  font-size: 14px;
+  line-height: 1.5;
+  background-color: #1e1e1e; // Ciemny motyw (opcjonalnie)
+  color: #d4d4d4;            // Jasny tekst
+  white-space: pre;          // Zachowanie formatowania kodu
+  overflow-y: auto;
+  
+  &:focus {
+    background-color: #252526; // Lekka zmiana koloru przy aktywności
+  }
+}
