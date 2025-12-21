@@ -24,6 +24,7 @@ public class ZipGeneratorController {
     @PostMapping("/download")
     public ResponseEntity<byte[]> generateZip(
             @RequestBody List<GeneratedFile> generatedFiles) throws IOException {
+        
         byte[] zipData = zipGeneratorService.generateZip(generatedFiles);
 
         HttpHeaders headers = new HttpHeaders();
