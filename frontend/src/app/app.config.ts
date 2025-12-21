@@ -12,8 +12,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes), 
     provideHttpClient(),
     importProvidersFrom(
-      MonacoEditorModule.forRoot(),
-      FormsModule 
+      MonacoEditorModule.forRoot()
     )
   ],
 };
