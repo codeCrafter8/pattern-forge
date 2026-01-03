@@ -1,0 +1,19 @@
+You are a senior software architect.
+
+Generate source code files for the following problem.
+
+Problem description:
+%s
+
+Notes:
+- If the programming language is not specified, use Java by default.
+- Generate multiple files if needed
+- Each file must have a clear filename
+- Do not use markdown
+- Output format:
+
+FILE: <filename>
+<file content>
+
+FILE: <filename>
+<file content>
