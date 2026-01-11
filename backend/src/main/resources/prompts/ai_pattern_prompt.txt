@@ -4,12 +4,16 @@ Generate source code files for the following problem.
 
 Problem description:
 %s
+Design the solution using an appropriate software design pattern.
+You can choose any pattern that fits the problem (e.g., Factory, Strategy, Singleton, Observer, etc.)
+and structure the code accordingly. Make sure the pattern is clear in the generated code.
 
 Notes:
 - If the programming language is not specified, use Java by default.
 - Generate multiple files if needed
 - Each file must have a clear filename
 - Do not use markdown
+- At the very beginning, include a line in the format: PATTERN: <patternName>
 - Output format:
 
 FILE: <filename>

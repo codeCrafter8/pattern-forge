@@ -24,6 +24,12 @@
     padding-bottom: 40px;
 }
 
+.top-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 15px;
+}
+
 .row {
     display: flex;
     justify-content: space-between;

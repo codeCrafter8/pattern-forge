@@ -1,0 +1,15 @@
+.full-width {
+  width: 100%;
+}
+
+mat-dialog-content {
+  min-width: 500px;
+}
+
+textarea {
+  resize: vertical;
+}
+
+mat-form-field.full-width {
+  margin-top: 16px;
+}

@@ -1,6 +1,7 @@
 package com.example.patternforge.service;
 
 import com.example.patternforge.dto.AiPatternRequest;
+import com.example.patternforge.dto.AiPatternResponse;
 import com.example.patternforge.dto.GeneratedFile;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.chat.client.ChatClient;
@@ -22,7 +23,7 @@ public class AiGeneratorService {
     @Value("classpath:prompts/ai_pattern_prompt.txt")
     private Resource promptResource;
 
-    public List<GeneratedFile> generateCode(AiPatternRequest request) {
+    public AiPatternResponse generateCode(AiPatternRequest request) {
         String prompt = loadPrompt(request);
 
         String response = chatClient
@@ -31,7 +32,13 @@ public class AiGeneratorService {
                 .call()
                 .content();
 
-        return parseGeneratedFiles(response);
+        String patternName = extractPatternName(response);
+
+        String cleanedResponse = response.replaceFirst("(?s)^.*?(?=FILE:)", "");
+
+        List<GeneratedFile> files = parseGeneratedFiles(cleanedResponse);
+
+        return new AiPatternResponse(files, patternName);
     }
 
     private String loadPrompt(AiPatternRequest request) {
@@ -62,5 +69,15 @@ public class AiGeneratorService {
         }
 
         return files;
+    }
+
+    private String extractPatternName(String aiResponse) {
+        String[] lines = aiResponse.split("\n");
+        for (String line : lines) {
+            if (line.startsWith("PATTERN:")) {
+                return line.substring("PATTERN:".length()).trim();
+            }
+        }
+        return "";
     }
 }

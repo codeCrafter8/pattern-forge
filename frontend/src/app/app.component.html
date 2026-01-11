@@ -1,6 +1,17 @@
 <app-pattern-menu (patternSelected)="handlePatternSelection($event)"></app-pattern-menu>
 <div class="pattern-name">{{ selectedPattern | titlecase }}</div>
 <div class="main-content">
+    <div class="top-actions">
+        <button
+            mat-stroked-button
+            color="accent"
+            (click)="openAiDialog()"
+        >
+            <mat-icon>smart_toy</mat-icon>
+            Generate with AI
+        </button>
+    </div>
+
     <div class="row">
         <app-config-panel 
             (filesGenerated)="handleFilesGenerated($event)"
