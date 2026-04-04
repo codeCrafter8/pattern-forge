@@ -31,6 +31,11 @@ The application supports the following patterns:
 - Java
 - C++
 
+## Screenshots
+<img width="928" height="646" alt="Zrzut ekranu 2026-01-18 175018" src="https://github.com/user-attachments/assets/bf1cd6db-8deb-4789-981b-154be536298f" />
+<img width="910" height="899" alt="Zrzut ekranu 2026-01-18 173410" src="https://github.com/user-attachments/assets/2dcd1ce5-308f-4a86-9e2e-22f420a3c94b" />
+<img width="457" height="342" alt="Zrzut ekranu 2026-01-18 174618" src="https://github.com/user-attachments/assets/76db8ddd-a290-4a1d-882f-7c7ca3195ebc" />
+
 ## Project Structure
 
 - `backend/` - Spring Boot application and code generation logic
