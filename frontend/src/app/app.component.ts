@@ -6,17 +6,22 @@ import { MatButtonModule } from '@angular/material/button';
 import { GeneratedFile } from './models/generated-file';
 import { NgIf, TitleCasePipe } from '@angular/common';
 import { ZipDownloadService } from './services/zip-download.service';
+import { MatDialog } from '@angular/material/dialog';
+import { AiGeneratorDialogComponent } from './components/ai-generator-dialog/ai-generator-dialog.component';
+import { MatIcon } from "@angular/material/icon";
+import { AiPatternResponse } from './models/ai-pattern-response';
 
 @Component({
   selector: 'app-root',
   imports: [
-    PatternMenuComponent, 
-    ConfigPanelComponent, 
+    PatternMenuComponent,
+    ConfigPanelComponent,
     CodeDisplayComponent,
     MatButtonModule,
     TitleCasePipe,
-    NgIf
-  ],
+    NgIf,
+    MatIcon
+],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
@@ -26,6 +31,7 @@ export class AppComponent {
 
   constructor(
     private zipDownloadService: ZipDownloadService,
+    private dialog: MatDialog,
   ) {}
   
   handlePatternSelection(pattern: string) {
@@ -51,6 +57,25 @@ export class AppComponent {
       },
       error: (err) => {
         console.error('Error downloading ZIP:', err);
+      }
+    });
+  }
+
+  openAiDialog(): void {
+    const dialogRef = this.dialog.open(AiGeneratorDialogComponent, {
+      width: '700px'
+    });
+
+    dialogRef.afterClosed().subscribe((files) => {
+      if (files) {
+        this.generatedFiles = files;
+      }
+    });
+
+    dialogRef.afterClosed().subscribe((aiResponse: AiPatternResponse) => {
+      if (aiResponse && aiResponse.generatedFiles.length > 0) {
+        this.generatedFiles = aiResponse.generatedFiles;
+        this.selectedPattern = aiResponse.patternName || this.selectedPattern;
       }
     });
   }
