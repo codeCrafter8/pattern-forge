@@ -25,6 +25,7 @@ public class CodeGeneratorController {
     @PostMapping("/generate")
     public ResponseEntity<List<GeneratedFile>> generateCode(
             @RequestBody @Valid PatternContext context) throws TemplateException, IOException {
+
         List<GeneratedFile> result = codeGeneratorService.generateFiles(context);
 
         return ResponseEntity.ok(result);

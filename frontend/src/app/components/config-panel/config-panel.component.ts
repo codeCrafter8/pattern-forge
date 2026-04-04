@@ -6,7 +6,7 @@ import { CodeGenerationContext } from '../../models/code-generation-context';
 import { CodeGeneratorService } from '../../services/code-generator.service';
 import { GeneratedFile } from '../../models/generated-file';
 import { PatternService } from '../../services/pattern.service';
-import { NgFor, NgIf } from '@angular/common';
+import { NgFor, NgIf, TitleCasePipe } from '@angular/common';
 import { VariableGroup } from '../../models/variable-group';
 import { VariableExtractionResult } from '../../models/variable-extraction-result';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -16,6 +16,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { SUPPORTED_PATTERN_NAMES } from '../../constants/pattern-constants';
 
 @Component({
   selector: 'app-config-panel',
@@ -32,7 +33,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     MatInputModule,
     MatTooltipModule,
     MatSelectModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    TitleCasePipe
   ],
   templateUrl: './config-panel.component.html',
   styleUrls: ['./config-panel.component.scss']
@@ -54,6 +56,7 @@ export class ConfigPanelComponent {
 
   @Input() selectedPattern: string = '';
   @Output() filesGenerated = new EventEmitter<GeneratedFile[]>();
+  patternSupported = true;
 
   constructor(
     private patternService: PatternService,
@@ -62,7 +65,11 @@ export class ConfigPanelComponent {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['selectedPattern'] && this.selectedPattern) {
-      this.loadVariablesForPattern(this.selectedPattern);
+      this.patternSupported = SUPPORTED_PATTERN_NAMES.includes(this.selectedPattern.toLowerCase());
+
+      if (this.patternSupported) {
+        this.loadVariablesForPattern(this.selectedPattern);
+      }
     }
   }
 

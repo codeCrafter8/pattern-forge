@@ -1,0 +1,25 @@
+<h2 mat-dialog-title>Generate Code with AI</h2>
+
+<mat-dialog-content>
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Describe your problem</mat-label>
+    <textarea
+      matInput
+      rows="8"
+      [(ngModel)]="description"
+      placeholder="Describe the design problem you want to solve..."
+    ></textarea>
+  </mat-form-field>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancel()">Cancel</button>
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="generate()"
+    [disabled]="loading"
+  >
+    Generate
+  </button>
+</mat-dialog-actions>
